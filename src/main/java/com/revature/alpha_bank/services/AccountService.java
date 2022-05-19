@@ -35,6 +35,9 @@ public class AccountService implements Serviceable<Account> {
             return null;
         }
     }
+
+
+
     @Override
     public List<Account> findByUser_email(String user_email) throws ResourcePersistanceException {
 
@@ -48,6 +51,9 @@ public class AccountService implements Serviceable<Account> {
             return null;
         }
     }
+
+
+
     @Override
     public String update(String account_type, String user_email) {
         //System.out.println("Hello there");
@@ -60,6 +66,8 @@ public class AccountService implements Serviceable<Account> {
 
     }
 
+
+
     @Override
     public String delete(String user_email) {
 
@@ -70,6 +78,8 @@ public class AccountService implements Serviceable<Account> {
         logger.info("Account has been deleted: " + user_email);
         return "Account has been successful deleted.";
     }
+
+
 
     public boolean validateAccountNotUsed(String user_email){
         return accountDao.checkUser_email(user_email);
@@ -96,46 +106,27 @@ public class AccountService implements Serviceable<Account> {
         logger.info("Account has been persisted: " + newAccount);
         return persistedAccount;
     }
+
+
+
+
     @Override
-    public boolean validateInput(Account newAccount) {
+    public boolean validateInput(Account newAccount)  {
 
         logger.debug("Validating Account: " + newAccount);
         if(newAccount == null) return false;
 
         if(newAccount.getBalance() <= 25.0 ) return false;
         if(newAccount.getAccount_type() == null || newAccount.getAccount_type().trim().equals("")) return false;
+       if(newAccount.getDeposit() < 0 ) return false;
+       if(newAccount.getWithdrawal() < 0 )  return false;
 
-        if(newAccount.getDeposit() < 0 ) return false;
 
-
-        if(newAccount.getWithdrawal() < 0 )  return false;
-
-        //TODO: figure out why we can't throw this exception
-        if ((newAccount.getBalance())-(newAccount.getWithdrawal()) < 0){
-          //  resp.getWriter().write("You are successfully logged out!");
-           // throw new InvalidRequestException("The amount you're trying to withdrawal an amount which is exceeding your total BALANCE amount . Please try less amount again");
-        }
-
-        if(newAccount.getOpen_date() == null || newAccount.getAccount_type().trim().equals("")) return false;
+        if(newAccount.getOpen_date() == null || newAccount.getOpen_date().trim().equals("")) return false;
 
         return newAccount.getUser_email() != null || newAccount.getUser_email().trim().equals("");
     }
-//Todo: we never used it
-    public Account authenticateAccount(String account_type, String user_email){
 
-        if(user_email == null || user_email.trim().equals("") || user_email  == null || user_email.trim().equals("")) {
-            throw new InvalidRequestException("Either account type or account number is an invalid entry. Please try logging in again");
-        }
-
-        Account authenticatedAccount = accountDao.authenticateAccount(account_type, user_email);
-        if (authenticatedAccount == null){
-            throw new AuthenticationException("Unauthenticated user, information provided was not consistent with our database.");
-        }
-        System.out.println(authenticatedAccount);
-
-        return authenticatedAccount;
-
-    }
 
 }
 

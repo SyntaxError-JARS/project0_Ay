@@ -30,10 +30,6 @@ public class CustomerServlet extends HttpServlet implements Authable {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         if(!Authable.checkAuth(req, resp)) return;
-//        String pathInfo = req.getPathInfo();
-//        String[] pathParts = pathInfo.split("/");
-//        System.out.println(pathParts[0] + pathParts[1] + pathParts[2]);
-
 
         if(req.getParameter("lname") != null && req.getParameter("email") != null){
             resp.getWriter().write("Hey you have the follow last name and email " + req.getParameter("lname") + " " + req.getParameter("email") );
@@ -41,8 +37,6 @@ public class CustomerServlet extends HttpServlet implements Authable {
         }
 
         if(req.getParameter("email") != null){
-            //System.out.println(req.getParameter("last_name")); // To check what is in the last_name.
-            //System.out.println(req.getParameter("email"));
             List<Customer> customer;
             try {
                 customer = customerServices.findByUser_email(req.getParameter("email")); // EVERY PARAMETER RETURN FROM A URL IS A STRING
@@ -56,7 +50,6 @@ public class CustomerServlet extends HttpServlet implements Authable {
             resp.getWriter().write(payload);
 
             return;
-            //Review
         }
 
             List<Customer> customer = customerServices.readAll();
@@ -69,26 +62,26 @@ public class CustomerServlet extends HttpServlet implements Authable {
     protected void doPost (HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         if(!Authable.checkAuth(req, resp)) return;
+        try {
+            Customer newCustomer = mapper.readValue(req.getInputStream(), Customer.class); // from JSON to Java Object (Customer)
+            System.out.println(req.getInputStream());
+            Customer persistedCustomer = customerServices.create(newCustomer);
 
-        //System.out.println("checking this area");
-        Customer newCustomer = mapper.readValue(req.getInputStream(), Customer.class); // from JSON to Java Object (Customer)
-        System.out.println(req.getInputStream());
-        Customer persistedCustomer = customerServices.create(newCustomer);
-
-        String payload = mapper.writeValueAsString(persistedCustomer); // Mapping from Java Object (Customer) to JSON
-        System.out.println(payload);
-        resp.getWriter().write("Persisted the provided Customer as show below \n");
-        resp.getWriter().write(payload);
-        resp.setStatus(201);
+            String payload = mapper.writeValueAsString(persistedCustomer); // Mapping from Java Object (Customer) to JSON
+            System.out.println(payload);
+            resp.getWriter().write("Persisted the provided Customer as show below \n");
+            resp.getWriter().write(payload);
+            resp.setStatus(201);
+        } catch(Exception e){
+            resp.getWriter().write("This customer is already excited \n");
+        }
 
     }
     @Override
     protected void doPut (HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if(!Authable.checkAuth(req, resp)) return;
         try {
-            //System.out.println("Hello there");
-            //System.out.println(req.getParameter("lname"));
-            //System.out.println(req.getParameter("email"));
+
             String payload = mapper.writeValueAsString(customerServices.update(req.getParameter("lname"), req.getParameter("email")));
             resp.getWriter().write(payload);
         } catch (ResourcePersistanceException e){

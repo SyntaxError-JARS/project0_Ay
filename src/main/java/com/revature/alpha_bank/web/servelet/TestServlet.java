@@ -11,7 +11,7 @@ public class TestServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.getWriter().write("<h1>/Welcome to Alpha Bank// </h1>");
+        resp.getWriter().write("<h1>/Welcome to Alpha Bank test method// </h1>");
     }
 
 }

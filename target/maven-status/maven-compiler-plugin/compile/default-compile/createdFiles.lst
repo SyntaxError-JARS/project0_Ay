@@ -25,5 +25,4 @@ com\revature\alpha_bank\web\servelet\TransactionHServlet.class
 com\revature\alpha_bank\exceptions\InvalidRequestException.class
 com\revature\alpha_bank\exceptions\AuthenticationException.class
 com\revature\alpha_bank\web\dto\LoginCreds.class
-com\revature\alpha_bank\web\util\ContextLoaderListener.class
 com\revature\alpha_bank\services\TransactionService.class

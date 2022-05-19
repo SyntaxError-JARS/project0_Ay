@@ -15,7 +15,7 @@ public class TransactionService {
 
         double updatedAccount = TransactionDao.addToBalance(deposit, user_email);
         if(updatedAccount == 0){
-            throw new ResourcePersistanceException("Amount was not deposited in the database. ");
+            throw new ResourcePersistanceException("Amount was not deposited to your Balance, please enter positive amount? ");
         }
         logger.info("Amount " + deposit + " of user email " + user_email + " has been deposited: " );
         return "Amount has been successful deposited.";
@@ -25,10 +25,10 @@ public class TransactionService {
 
         double updatedAccount = TransactionDao.subtractFromBalance(withdrawal, user_email);
         if(updatedAccount == 0){
-            throw new ResourcePersistanceException("Amount was not deposited in the database. ");
+            throw new ResourcePersistanceException("Amount was not withdrawn from your Balance, please enter smaller amount? ");
         }
         logger.info("Amount " + withdrawal + " of user email " + user_email + " has been withdrawn: " );
-        return "Amount has been successful withdrawn.";
+        return "Amount has been successfully withdrawn.";
 
     }
 }

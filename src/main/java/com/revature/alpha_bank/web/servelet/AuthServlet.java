@@ -48,9 +48,6 @@ public class AuthServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
             try {
-                // The jackson library has the ObjectMapper with methods to readValues from the HTTPRequest
-                // body as an input stream and assign it to the class
-                //Customer reqCustomer = mapper.readValue(req.getInputStream(), Customer.class);
                 LoginCreds loginCreds = mapper.readValue(req.getInputStream(), LoginCreds.class);
 
                 Customer authCustomer = customerServices.authenticateCustomer(loginCreds.getEmail(), loginCreds.getPassword());

@@ -4,7 +4,6 @@ import com.revature.alpha_bank.exceptions.ResourcePersistanceException;
 import com.revature.alpha_bank.models.Customer;
 import com.revature.alpha_bank.util.ConnectionFactory;
 import com.revature.alpha_bank.util.logging.Logger;
-
 import java.io.IOException;
 import java.sql.*;
 import java.util.LinkedList;
@@ -51,9 +50,7 @@ public class CustomerDao implements Genericable<Customer>{
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
 
             String sql = "SELECT * FROM bank_customers";//WHERE first_name like ?
-/*          PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, "A%");
-            ResultSet rs = ps.executeQuery(sql);*/
+
             Statement s = conn.createStatement();
             ResultSet rs =s.executeQuery(sql);
             while (rs.next()) {
@@ -115,7 +112,6 @@ public class CustomerDao implements Genericable<Customer>{
 
     @Override
     public int update(String lname, String email) {
-        //System.out.println("Hello there Dao");
         int affectedRow;
         try (Connection conn = ConnectionFactory.getInstance().getConnection()){
 

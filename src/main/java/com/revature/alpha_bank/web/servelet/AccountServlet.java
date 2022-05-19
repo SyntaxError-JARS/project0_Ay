@@ -48,7 +48,7 @@ public class AccountServlet extends HttpServlet implements Authable {
 
         if(!checkAuth(req, resp)) return;
 
-
+        try{
         Account newAccount = mapper.readValue(req.getInputStream(), Account.class); // from JSON to Java Object (Account)
         Account persistedAccount = accountService.create(newAccount);
 
@@ -57,6 +57,9 @@ public class AccountServlet extends HttpServlet implements Authable {
         resp.getWriter().write("Persisted the provided account as show below \n");
         resp.getWriter().write(payload);
         resp.setStatus(201);
+    }catch(Exception e){
+            resp.getWriter().write("There is a customer registered used this email or already have an account \n");
+        }
     }
 
     @Override

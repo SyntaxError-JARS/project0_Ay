@@ -4,7 +4,6 @@ import com.revature.alpha_bank.exceptions.ResourcePersistanceException;
 import com.revature.alpha_bank.models.Account;
 import com.revature.alpha_bank.util.ConnectionFactory;
 import com.revature.alpha_bank.util.logging.Logger;
-
 import java.io.IOException;
 import java.sql.*;
 import java.util.LinkedList;

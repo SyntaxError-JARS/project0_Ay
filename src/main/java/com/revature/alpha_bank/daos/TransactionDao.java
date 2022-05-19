@@ -12,18 +12,13 @@ public class TransactionDao {
         int affectedRow;
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
 
-
-
-
-            String sql = String.format("update account_info set balance = balance + ?  where user_email = ?");
+            String sql = String.format("update account_info set deposit = deposit + ?  where user_email = ?");
 
             double x = Double.parseDouble(deposit);
 
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setDouble(1, x);
             ps.setString(2, User_email);
-
-
 
 
             affectedRow = ps.executeUpdate();
@@ -37,28 +32,40 @@ public class TransactionDao {
 
 
     public static int subtractFromBalance(String withdrawal, String User_email) {
-        int affectedRow;
-        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+        int affectedRow = 0;
 
-            double x = Double.parseDouble(withdrawal);
-            String sql = String.format("update account_info set balance = balance - ?  where user_email = ? ");
+        try {
+            if (Double.parseDouble(withdrawal) < 0) {
+                System.out.println(" Please enter a positive value. ");
+            } else {
+                try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
 
+                    String sql = String.format("update account_info set withdrawal = withdrawal + ?  where User_email = ?");
 
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setDouble(1, x);
-            ps.setString(2, User_email);
+                    double x = Double.parseDouble(withdrawal);
 
+                    PreparedStatement ps = conn.prepareStatement(sql);
+                    ps.setDouble(1, x);
+                    ps.setString(2, User_email);
 
+                    affectedRow = ps.executeUpdate();
 
+                } catch (SQLException e) {
+                    System.out.println(" Please make sure that the data entered was correct");
+                }
+            }
 
-            affectedRow = ps.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (NumberFormatException e) {
+            System.out.println("Hey, you entered something wrong...");
         }
         return affectedRow;
-
     }
 
-
 }
+
+
+
+
+
+
+
